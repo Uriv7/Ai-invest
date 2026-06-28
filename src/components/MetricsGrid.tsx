@@ -1,67 +1,66 @@
-'use client';
-
 import React from 'react';
 import { FinancialMetrics } from '@/types';
 import { motion } from 'framer-motion';
-import { DollarSign, TrendingUp, Activity, PieChart, Target, AlertCircle } from 'lucide-react';
+import { TrendingUp, Activity, DollarSign, PieChart, BarChart3, AlertCircle } from 'lucide-react';
 
-interface MetricsGridProps {
-  metrics: FinancialMetrics | null;
-}
-
-export default function MetricsGrid({ metrics }: MetricsGridProps) {
-  if (!metrics) {
-    return (
-      <div className="glass-panel p-6 mb-8 text-center text-gray-400">
-        <AlertCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
-        <p>No financial metrics available.</p>
-      </div>
-    );
-  }
-
-  const formatNumber = (num: number | null, style: 'currency' | 'percent' | 'decimal' = 'decimal') => {
-    if (num === null || num === undefined) return 'N/A';
-    if (style === 'currency') {
-      return new Intl.NumberFormat('en-US', { style: 'currency', currency: metrics.currency || 'USD', notation: 'compact' }).format(num);
-    }
-    if (style === 'percent') {
-      return new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 2 }).format(num / 100);
-    }
-    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(num);
-  };
+export default function MetricsGrid({ metrics }: { metrics?: FinancialMetrics }) {
+  if (!metrics) return null;
 
   const cards = [
-    { label: 'Current Price', value: formatNumber(metrics.currentPrice, 'currency'), icon: DollarSign, color: 'text-emerald-400' },
-    { label: 'Market Cap', value: formatNumber(metrics.marketCap, 'currency'), icon: PieChart, color: 'text-blue-400' },
-    { label: 'P/E Ratio', value: formatNumber(metrics.peRatio), icon: Target, color: 'text-purple-400' },
-    { label: 'Revenue Growth YoY', value: formatNumber(metrics.revenueGrowthYoY, 'percent'), icon: TrendingUp, color: 'text-green-400' },
-    { label: 'Profit Margin', value: formatNumber(metrics.profitMarginPercent, 'percent'), icon: Activity, color: 'text-cyan-400' },
-    { label: 'Beta', value: formatNumber(metrics.beta), icon: Activity, color: 'text-amber-400' },
+    { label: 'Current Price', value: metrics.currentPrice ? \`\${metrics.currency} \${metrics.currentPrice.toFixed(2)}\` : 'N/A', icon: DollarSign, color: 'text-blue-400' },
+    { label: 'Market Cap', value: metrics.marketCap ? \`$\${(metrics.marketCap / 1e9).toFixed(2)}B\` : 'N/A', icon: PieChart, color: 'text-purple-400' },
+    { label: 'Trailing P/E', value: metrics.peRatio ? metrics.peRatio.toFixed(2) : 'N/A', icon: Activity, color: 'text-emerald-400' },
+    { label: 'Forward P/E', value: metrics.forwardPE ? metrics.forwardPE.toFixed(2) : 'N/A', icon: Activity, color: 'text-emerald-400' },
+    { label: 'Profit Margin', value: metrics.profitMarginPercent ? \`\${metrics.profitMarginPercent.toFixed(2)}%\` : 'N/A', icon: TrendingUp, color: 'text-amber-400' },
+    { label: 'Revenue Growth YoY', value: metrics.revenueGrowthYoY ? \`\${metrics.revenueGrowthYoY.toFixed(2)}%\` : 'N/A', icon: BarChart3, color: 'text-cyan-400' },
+    { label: 'Debt to Equity', value: metrics.debtToEquity ? metrics.debtToEquity.toFixed(2) : 'N/A', icon: AlertCircle, color: 'text-red-400' },
+    { label: 'Dividend Yield', value: metrics.dividendYieldPercent ? \`\${metrics.dividendYieldPercent.toFixed(2)}%\` : 'N/A', icon: DollarSign, color: 'text-green-400' },
   ];
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300 } }
+  };
+
   return (
-    <div className="mb-8">
-      <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-        <DollarSign className="mr-2 w-5 h-5 text-blue-400" />
-        Key Financials
+    <div className="mb-12">
+      <h3 className="text-xl font-semibold mb-6 flex items-center text-white/90">
+        <Activity className="w-5 h-5 mr-2 text-indigo-400" />
+        Live Financial Telemetry
       </h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {cards.map((card, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="glass-card p-5 relative overflow-hidden"
+      <motion.div 
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+      >
+        {cards.map((c, i) => (
+          <motion.div 
+            key={i} 
+            variants={item}
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="glass-panel p-5 group relative overflow-hidden"
           >
-            <card.icon className={`absolute right-[-10px] top-[-10px] w-16 h-16 opacity-5 ${card.color}`} />
-            <div className="text-gray-400 text-xs uppercase tracking-wider mb-2 font-medium">{card.label}</div>
-            <div className={`text-xl md:text-2xl font-bold ${card.value === 'N/A' ? 'text-gray-500' : 'text-white'}`}>
-              {card.value}
+            <div className="absolute -inset-10 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full blur-xl pointer-events-none" />
+            
+            <div className="relative z-10 flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-gray-400">{c.label}</span>
+              <c.icon className={\`w-4 h-4 \${c.color} opacity-80 group-hover:opacity-100 transition-opacity\`} />
+            </div>
+            <div className="relative z-10 text-2xl font-bold tracking-tight text-white group-hover:text-indigo-100 transition-colors">
+              {c.value}
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

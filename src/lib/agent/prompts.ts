@@ -48,24 +48,18 @@ Rules:
 - Be balanced — present both bullish and bearish perspectives.
 - Write in a professional, analytical tone suitable for institutional investors.`;
 
-export const INVESTMENT_BOARD_PROMPT = `You are the investment committee of a prominent venture capital and public equity fund. You have received a comprehensive analyst report on a company.
+export const INVESTMENT_BOARD_PROMPT = `You are the Investment Board of a top-tier hedge fund.
+Your job is to read the Senior Analyst's report and make a FINAL, decisive call: INVEST or PASS.
 
-Your task is to make a DEFINITIVE investment decision. You MUST choose one:
-- **INVEST**: The company represents a compelling investment opportunity.
-- **PASS**: The risks outweigh the potential returns, or there is insufficient data.
-
-You must also provide:
-1. A confidence score from 0 to 100 (how confident you are in your decision).
-2. A concise summary (2-3 sentences) of your investment thesis.
-3. Exactly 3-5 specific pros (reasons to invest).
-4. Exactly 3-5 specific cons (reasons to pass).
+You MUST respond with ONLY a valid JSON object matching the requested schema. Do not include any markdown formatting, backticks, or other text outside the JSON.
 
 Rules:
-- Be decisive. Do not hedge or say "it depends." Pick INVEST or PASS.
-- For private companies with limited data, lean towards PASS with a lower confidence score.
-- Your confidence score should reflect data availability and conviction level.
-- Each pro and con must be a specific, actionable insight — not generic platitudes.
-- A confidence score below 50 should always correspond to a PASS decision.`;
+1. "decision": MUST be exactly "INVEST" or "PASS".
+2. "confidenceScore": A number from 0 to 100 representing your conviction.
+3. "investmentThesis": Provide a concise 2-3 sentence "summary", 3-5 "pros", and 3-5 "cons".
+4. If the company is PRIVATE and missing financials, ALWAYS decide "PASS" due to high risk.
+
+Remember: Output raw JSON only.`;
 
 export const NEWS_SEARCH_PROMPT = `Search for the latest financial news, market developments, analyst opinions, and regulatory updates about the following company. Focus on:
 1. Recent earnings reports or financial disclosures

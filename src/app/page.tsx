@@ -88,37 +88,60 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent">
+    <div className="min-h-screen bg-transparent selection:bg-indigo-500/30">
       {/* Header */}
-      <header className="border-b border-white/10 bg-black/20 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center text-xl font-bold text-white">
-            <Briefcase className="w-6 h-6 mr-2 text-blue-500" />
-            AI Investment Analyst
-          </div>
+      <header className="border-b border-white/5 bg-black/30 backdrop-blur-2xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center text-2xl font-bold text-white tracking-tight"
+          >
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mr-3 shadow-[0_0_15px_rgba(79,70,229,0.5)]">
+              <Briefcase className="w-5 h-5 text-white" />
+            </div>
+            AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 ml-2">Analyst</span>
+          </motion.div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-12">
           {/* Main Content Area */}
           <div className="flex-1 min-w-0">
-            <div className="text-center mb-10">
-              <h1 className="text-4xl font-extrabold text-white tracking-tight mb-4">
-                Automated Due Diligence
-              </h1>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Enter a company name below to trigger the multi-agent LangGraph workflow.
-                The agent will fetch live financials, read market news, and synthesize an investment verdict.
-              </p>
-            </div>
+            
+            <AnimatePresence mode="wait">
+              {!result && !isLoading && steps.length === 0 && (
+                <motion.div 
+                  key="hero"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="text-center pt-20 pb-12"
+                >
+                  <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 leading-tight">
+                    Institutional Research, <br/>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">Automated.</span>
+                  </h1>
+                  <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
+                    Enter a company name below to trigger the multi-agent LangGraph workflow.
+                    The agent will fetch live financials, read market news, and synthesize an investment verdict.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <SearchBar onSearch={handleSearch} isLoading={isLoading} />
 
             {error && (
-              <div className="bg-red-500/20 border border-red-500/50 text-red-200 p-4 rounded-lg mb-8 text-center">
-                {error}
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-500/10 border border-red-500/30 text-red-400 p-6 rounded-2xl mt-8 text-center backdrop-blur-xl shadow-[0_0_30px_rgba(239,68,68,0.15)]"
+              >
+                <div className="font-bold mb-1">Research Failed</div>
+                <div className="text-sm">{error}</div>
+              </motion.div>
             )}
 
             {(isLoading || steps.length > 0) && !result && !error && (
@@ -129,10 +152,11 @@ export default function Home() {
               {result && (
                 <motion.div
                   key="result"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="pt-12"
                 >
                   <VerdictCard 
                     decision={result.decision} 
@@ -148,7 +172,7 @@ export default function Home() {
           </div>
 
           {/* Sidebar */}
-          <div className="w-full lg:w-96 flex-shrink-0 lg:h-[calc(100vh-8rem)] lg:sticky lg:top-24">
+          <div className="w-full lg:w-96 flex-shrink-0 lg:h-[calc(100vh-8rem)] lg:sticky lg:top-28">
             <HistoryPanel 
               onSelectHistory={handleSelectHistory} 
               refreshTrigger={refreshHistory} 

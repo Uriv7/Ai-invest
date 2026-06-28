@@ -172,7 +172,8 @@ export async function investmentBoardNode(state: AgentStateType) {
     }),
   });
 
-  const structuredLlm = llm.withStructuredOutput(schema);
+  // Explicitly name the tool extraction for better compatibility with Groq's parser
+  const structuredLlm = llm.withStructuredOutput(schema, { name: "extract" });
 
   const response = await structuredLlm.invoke([
     { role: "system", content: INVESTMENT_BOARD_PROMPT },
