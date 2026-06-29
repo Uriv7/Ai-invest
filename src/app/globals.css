@@ -30,10 +30,10 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
   body {
-    @apply bg-[var(--background)] text-foreground antialiased min-h-screen relative overflow-x-hidden;
+    @apply bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen relative overflow-x-hidden;
   }
 }
 
@@ -89,8 +89,23 @@ body::after {
 
 /* Glassmorphism Utilities */
 .glass-panel {
-  @apply bg-[var(--card)] backdrop-blur-xl border border-white/10 rounded-[var(--radius)] shadow-2xl;
+  background-color: var(--card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 .glass-input {
-  @apply bg-white/5 border border-white/10 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 rounded-full px-6 py-4 outline-none text-white placeholder-gray-400 transition-all duration-300;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  padding: 1rem 1.5rem;
+  outline: none;
+  color: white;
+  transition: all 0.3s;
+}
+.glass-input:focus {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
 }

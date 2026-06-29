@@ -44,9 +44,9 @@ export default function VerdictCard({ decision, confidenceScore }: VerdictCardPr
           <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
             <motion.div 
               initial={{ width: 0 }}
-              animate={{ width: \`\${confidenceScore}%\` }}
+              animate={{ width: `${confidenceScore}%` }}
               transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-              className={\`h-full rounded-full \${isInvest ? 'bg-emerald-500' : 'bg-red-500'} shadow-[0_0_10px_currentColor]\`}
+              className={`h-full rounded-full ${isInvest ? 'bg-emerald-500' : 'bg-red-500'} shadow-[0_0_10px_currentColor]`}
             />
           </div>
         </div>

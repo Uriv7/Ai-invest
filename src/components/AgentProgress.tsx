@@ -18,7 +18,7 @@ export default function AgentProgress({ steps }: AgentProgressProps) {
         <div className="p-6 space-y-4">
           <AnimatePresence>
             {steps.map((step, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -33,11 +33,11 @@ export default function AgentProgress({ steps }: AgentProgressProps) {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-white/90">
-                    {step.node.replace(/Node$/, '').toUpperCase()}
+                    {step.nodeId?.replace(/Node$/, '').toUpperCase() || 'AGENT'}
                   </div>
-                  {step.message && (
+                  {step.step && (
                     <div className="text-sm text-gray-400 mt-1 font-mono bg-black/20 p-2 rounded border border-white/5 inline-block">
-                      > {step.message}
+                      {'>'} {step.step}
                     </div>
                   )}
                 </div>
@@ -45,11 +45,10 @@ export default function AgentProgress({ steps }: AgentProgressProps) {
             ))}
           </AnimatePresence>
 
-          {/* Skeleton Loaders if running */}
           {steps.length > 0 && steps[steps.length - 1]?.type !== 'result' && (
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               className="pt-4 border-t border-white/5 mt-4"
             >
               <div className="flex animate-pulse space-x-4">
