@@ -3,28 +3,20 @@
 @tailwind utilities;
 @plugin "@tailwindcss/typography";
 
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
 @layer base {
   :root {
-    --background: #030712; /* Deep space black */
-    --foreground: #f8fafc;
-    --card: rgba(17, 24, 39, 0.6);
-    --card-foreground: #f8fafc;
-    --popover: #0f172a;
-    --popover-foreground: #f8fafc;
-    --primary: #4f46e5; /* Indigo */
-    --primary-foreground: #ffffff;
-    --secondary: #1e293b;
-    --secondary-foreground: #f8fafc;
-    --muted: #1e293b;
-    --muted-foreground: #94a3b8;
-    --accent: #9333ea; /* Purple */
-    --accent-foreground: #ffffff;
-    --destructive: #ef4444;
-    --destructive-foreground: #ffffff;
-    --border: rgba(255, 255, 255, 0.1);
-    --input: rgba(255, 255, 255, 0.05);
-    --ring: rgba(79, 70, 229, 0.5);
-    --radius: 0.75rem;
+    --background: #050505;
+    --foreground: #fafafa;
+    --card: rgba(20, 20, 20, 0.6);
+    --border: rgba(255, 255, 255, 0.08);
+    --input: rgba(255, 255, 255, 0.04);
+    --radius: 1rem;
+    --primary: #4f46e5;
+    --accent: #9333ea;
   }
 }
 
@@ -33,27 +25,34 @@
     border-color: var(--border);
   }
   body {
-    @apply bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen relative overflow-x-hidden;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
   }
 }
 
-/* Ambient Background Orbs */
 body::before, body::after {
   content: "";
   position: absolute;
   border-radius: 50%;
-  filter: blur(120px);
+  filter: blur(140px);
   z-index: -1;
-  opacity: 0.3;
+  opacity: 0.15;
   animation: float 20s infinite alternate ease-in-out;
+  pointer-events: none;
 }
 
 body::before {
   top: -10%;
-  left: -10%;
+  left: 0%;
   width: 50vw;
   height: 50vw;
-  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  background: var(--primary);
 }
 
 body::after {
@@ -61,17 +60,16 @@ body::after {
   right: -10%;
   width: 60vw;
   height: 60vw;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  background: var(--accent);
   animation-delay: -10s;
 }
 
 @keyframes float {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(5%, 10%) scale(1.1); }
-  100% { transform: translate(-5%, -5%) scale(0.9); }
+  50% { transform: translate(3%, 5%) scale(1.05); }
+  100% { transform: translate(-3%, -3%) scale(0.95); }
 }
 
-/* Custom Scrollbar for a premium feel */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -87,25 +85,27 @@ body::after {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Glassmorphism Utilities */
 .glass-panel {
   background-color: var(--card);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
+
 .glass-input {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--input);
+  border: 1px solid var(--border);
   border-radius: 9999px;
-  padding: 1rem 1.5rem;
+  padding: 1.2rem 1.5rem;
   outline: none;
   color: white;
-  transition: all 0.3s;
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
 }
 .glass-input:focus {
-  border-color: rgba(99, 102, 241, 0.5);
-  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.08);
 }

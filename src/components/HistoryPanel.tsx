@@ -53,10 +53,10 @@ export default function HistoryPanel({ onSelectHistory, refreshTrigger }: Histor
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.05 }}
               onClick={() => onSelectHistory(item)}
-              className="w-full text-left glass-card p-4 hover:bg-white/10 group flex items-center justify-between"
+              className="w-full text-left bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 rounded-xl p-4 transition-all duration-300 group flex items-center justify-between shadow-sm"
             >
               <div>
-                <div className="font-semibold text-white group-hover:text-blue-400 transition-colors">
+                <div className="font-semibold text-white/90 group-hover:text-indigo-400 transition-colors">
                   {item.companyName} {item.ticker ? `(${item.ticker})` : ''}
                 </div>
                 <div className="flex items-center text-xs text-gray-400 mt-1">
@@ -69,7 +69,7 @@ export default function HistoryPanel({ onSelectHistory, refreshTrigger }: Histor
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-blue-400 transition-colors" />
+              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-indigo-400 transition-colors" />
             </motion.button>
           ))
         )}
